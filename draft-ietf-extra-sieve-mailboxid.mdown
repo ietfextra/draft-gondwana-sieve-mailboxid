@@ -270,7 +270,9 @@ mailing list.
 ## draft-gondwana-sieve-mailboxid-01
 
 * Switch to :mailboxid tagged parameter value with fallback mailbox name.
-* Document interation with special-use.
+* Document interaction with "mailbox".
+* Document interaction with "special-use".
+* Document interaction with "fcc".
 * Document security considerations around :mailboxid and :create.
 
 ## draft-gondwana-sieve-mailboxid-00
