@@ -2,14 +2,14 @@
     title = "Sieve Email Filtering: delivery by mailboxid"
     abbrev = "Sieve MAILBOXID"
     category = "std"
-    docName = "draft-gondwana-sieve-mailboxid-01"
+    docName = "draft-gondwana-sieve-mailboxid-02"
     updates = [5228]
     ipr= "trust200902"
     area = "Applications"
     workgroup = "EXTRA"
     keyword = ["sieve", "email"]
 
-    date = 2018-08-11T00:00:00Z
+    date = 2020-06-17T00:00:00Z
 
     [[author]]
     initials="B."
@@ -266,6 +266,12 @@ mailing list.
 # Changes
 
 (EDITOR: remove this section before publication)
+
+## draft-gondwana-sieve-mailboxid-02
+
+* Update document date by a couple of years!  Ooops, it got forgotten after
+  a WGLC which got not dissent.
+* Create xml2rfc v3 output.
 
 ## draft-gondwana-sieve-mailboxid-01
 
