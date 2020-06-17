@@ -11,6 +11,12 @@
 
     date = 2020-06-17T00:00:00Z
 
+    [seriesInfo]
+    name="Internet-Draft"
+    value="draft-gondwana-sieve-mailboxid-02"
+    stream="IETF"
+    status="standard"
+
     [[author]]
     initials="B."
     surname="Gondwana"
