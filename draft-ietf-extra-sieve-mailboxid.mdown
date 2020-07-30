@@ -2,7 +2,7 @@
     title = "Sieve Email Filtering: delivery by mailboxid"
     abbrev = "Sieve MAILBOXID"
     category = "std"
-    docName = "draft-ietf-extra-sieve-mailboxid-00"
+    docName = "draft-ietf-extra-sieve-mailboxid-01"
     updates = [5228]
     ipr= "trust200902"
     area = "Applications"
@@ -13,7 +13,7 @@
 
     [seriesInfo]
     name="Internet-Draft"
-    value="draft-ietf-extra-sieve-mailboxid-00"
+    value="draft-ietf-extra-sieve-mailboxid-01"
     stream="IETF"
     status="standard"
 
@@ -46,16 +46,18 @@ and for testing the existance of mailboxes.
 
 # Introduction
 
-Sieve rules are sometimes created using graphical interfaces which
-allow users to select the mailbox to be used as a target for a rule.
+[@!RFC5228] Sieve rules are sometimes created using graphical interfaces
+which allow users to select the mailbox to be used as a target for a rule.
+
 If that mailbox is renamed, the client may also update its internal
 representation of the rule and update the sieve script to match,
 however this is a multi-step process and subject to partial failures.
 Also, if the folder is renamed by a different mechanism (e.g. another
 IMAP client) the rules will get out of sync.
 
-By extending `fileinto` to reference an immutable mailboxid, sieve rules
-can continue to target the same mailbox, even if it gets renamed.
+By extending `fileinto` to reference the immutable mailboxid specified by
+[@!RFC8474] , sieve rules can continue to target the same mailbox, even
+if it gets renamed.
 
 # Conventions Used In This Document
 
@@ -239,7 +241,7 @@ test /= "mailboxidexists" string-list
 tag /= ":mailboxid" string
 ```
 
-If [@I-D.ietf-extra-sieve-fcc] is supported:
+If [@RFC8580] is supported:
 ```
 FCC =/ [":mailboxid" <mailboxid: string>]
 ```
@@ -271,8 +273,8 @@ IANA are requested to add a capability to the sieve-extensions registry:
 # Acknowledgements
 
 This document borrows heavily from [@RFC5490] for the matching
-mailboxexists test, and from [@I-D.ietf-extra-sieve-special-use]
-for an example of modifying the fileinto command.
+mailboxexists test, and from [@RFC8579] for an example of modifying
+the fileinto command.
 
 Thanks to Ned Freed and Ken Murchison and Alexey Melnikov for feedback
 on the EXTRA mailing list.
@@ -280,6 +282,11 @@ on the EXTRA mailing list.
 # Changes
 
 (EDITOR: remove this section before publication)
+
+## draft-ietf-sieve-mailboxid-01
+
+* fixed idnits - RFC5228 not mentioned in the abstract
+* fixed other I-D references I had missed, oops
 
 ## draft-ietf-sieve-mailboxid-00
 
