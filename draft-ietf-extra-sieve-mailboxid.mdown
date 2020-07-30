@@ -2,18 +2,18 @@
     title = "Sieve Email Filtering: delivery by mailboxid"
     abbrev = "Sieve MAILBOXID"
     category = "std"
-    docName = "draft-gondwana-sieve-mailboxid-02"
+    docName = "draft-ietf-extra-sieve-mailboxid-00"
     updates = [5228]
     ipr= "trust200902"
     area = "Applications"
     workgroup = "EXTRA"
     keyword = ["sieve", "email"]
 
-    date = 2020-06-17T00:00:00Z
+    date = 2020-07-30T00:00:00Z
 
     [seriesInfo]
     name="Internet-Draft"
-    value="draft-gondwana-sieve-mailboxid-02"
+    value="draft-ietf-extra-sieve-mailboxid-00"
     stream="IETF"
     status="standard"
 
@@ -22,7 +22,7 @@
     surname="Gondwana"
     fullname="Bron Gondwana"
     role="editor"
-    organization = "FastMail"
+    organization = "Fastmail"
         [author.address]
         email = "brong@fastmailteam.com"
         uri = "https://www.fastmail.com"
@@ -35,13 +35,12 @@
 
 .# Abstract
 
-The OBJECTID capability of the IMAP protocol (I-D.ietf-extra-imap-objectid)
-allows clients to identify mailboxes by a unique identifier which survives
-rename. In contrast, the Sieve mail filtering language (RFC 5228) currently
-has no such capability.  This memo defines a Sieve extension that fills
-this gap: it adds a method for specifying the unique identifier of a mailbox
-as a target for fileinto rules, and a method for testing the existence of
-a mailbox by its unique identifier.
+The OBJECTID capability of the IMAP protocol (RFC8474) allows clients to
+identify mailboxes by a unique identifier which survives rename.
+
+This document extends the Sieve mail filtering language (RFC5228) to
+allow using that same unique identifier as a target for fileinto rules,
+and for testing the existance of mailboxes.
 
 {mainmatter}
 
@@ -56,8 +55,7 @@ Also, if the folder is renamed by a different mechanism (e.g. another
 IMAP client) the rules will get out of sync.
 
 By extending `fileinto` to reference an immutable mailboxid, sieve rules
-can continue to target the same mailbox, regardless of how it gets
-renamed.
+can continue to target the same mailbox, even if it gets renamed.
 
 # Conventions Used In This Document
 
@@ -84,8 +82,10 @@ Normally, the "fileinto" command delivers the message in the mailbox
 specified using its positional mailbox argument.  However, if the
 optional ":mailboxid" argument is also specified, the "fileinto"
 command first checks whether a mailbox exists in the user's personal
-namespace [@!RFC2342] with the specified [@!I-D.ietf-extra-imap-objectid]
-MAILBOXID.  If that is the case, that mailbox is used for delivery instead.
+namespace [@!RFC2342] with the specified [@!RFC8474] MAILBOXID.
+
+If a matching mailbox is found, that mailbox is used for delivery.
+
 If there is no such mailbox, the "fileinto" action proceeds as it would
 without the ":mailboxid" argument.
 
@@ -106,7 +106,7 @@ if header :contains ["from"] "coyote" {
 ## Interaction with "mailbox" extension
 
 For servers which also support the [@RFC5490] mailbox extension, the ":create"
-modifier to fileinto does not create mailbox with the specified mailboxid,
+modifier to fileinto does not create the mailbox with the specified mailboxid,
 however it may be specified and interacts as normal with all other extensions.
 
 Example:
@@ -124,12 +124,13 @@ fileinto :mailboxid "Fnosuch"
 
 ## Interaction with "specialuse" extension
 
-For servers which also support [@I-D.ietf-extra-sieve-special-use], if a
-fileinto command has both ":mailboxid" and ":special-use" specified, then
-the mailboxid is resolved first.  If the mailboxid does not exist, then
-the special-use is evaluated next following the process specified in
-[@I-D.ietf-extra-sieve-special-use] - this includes processing of [@RFC5490]
-":create" tags to add the special-use on creation.
+For servers which also support [@RFC8579] delivery to special-use mailboxes,
+if a fileinto command has both ":mailboxid" and ":special-use" specified, then
+the mailboxid is resolved first.
+
+If a mailbox with the specified mailboxid does not exist, then the process
+specified in [@RFC8579] is followed - which includes processing of [@RFC5490]
+":create" tags to add the special-use to the created mailbox.
 
 Example:
 ```
@@ -160,8 +161,9 @@ fileinto :mailboxid "F1234567"
 
 ## Interaction with "fcc" extension
 
-This document extends the definition of the :fcc argument so that it can
-optionally be used with the ":mailboxid" argument.
+This document extends the definition of the ":fcc" argument defined in
+[@!RFC8580] so that it can optionally be used with the ":mailboxid"
+argument.
 
 ```
 FCC =/ [":mailboxid" <mailboxid: string>]
@@ -200,9 +202,9 @@ b) the user has 'p' or 'i' rights for the mailbox (see Section 5.2
 Note that a successful "mailboxidexists" test for a mailbox doesn't
 necessarily mean that a "fileinto :mailboxid" action on this mailbox
 would succeed.  For example, the "fileinto" action might put user over
-quota.  The "mailboxidexists" only verifies existence of the mailbox
-and whether the user in whose context the Sieve script runs has
-permissions to execute "fileinto" on it.
+quota.  The "mailboxidexists" test only verifies existence of the
+mailbox and whether the user in whose context the Sieve script runs
+has permissions to execute "fileinto" on it.
 
 Example:
 ```
@@ -219,14 +221,20 @@ if header :contains ["from"] "coyote" {
 }
 ```
 
-Not to implementers: this test behaves identically to the
+Note to implementers: this test behaves identically to the
 `mailboxexists` test defined in [@RFC5490] but operates on
 mailboxids rather than mailbox names.
+
+# Interaction with variables extension
+
+There is no special interaction defined, however as an objectid
+is a string in this document, objectid values can contain
+variable expansions if [@RFC5229] is enabled.
 
 # Formal Syntax
 
 ```
-test /= ":mailboxidexists" string-list
+test /= "mailboxidexists" string-list
 
 tag /= ":mailboxid" string
 ```
@@ -244,7 +252,7 @@ creating mailboxes with the specified ID by using ":create" and
 ":mailboxid" in a fileinto rule for a non-existant mailbox.
 
 Implementers are referred to the security considerations sections
-of those documents in [@!RFC5228], [@!I-D.ietf-extra-imap-objectid].
+of [@!RFC5228] and [@!RFC8474].
 
 # IANA considerations
 
@@ -254,9 +262,9 @@ IANA are requested to add a capability to the sieve-extensions registry:
     Subject: Registration of new Sieve extension
 
     Capability name: mailboxid
-    Description: adds test for checking for mailbox existence by objectid
-                 and a new optional argument to fileinto to select the
-                 destination mailbox using objectid.
+    Description: adds a test for checking mailbox existence by objectid,
+                 and new optional arguments to fileinto and :fcc which
+                 allow selecting the destination mailbox by objectid.
     RFC number: this RFC
     Contact address: The EXTRA discussion list <extra@ietf.org>
 
@@ -266,12 +274,21 @@ This document borrows heavily from [@RFC5490] for the matching
 mailboxexists test, and from [@I-D.ietf-extra-sieve-special-use]
 for an example of modifying the fileinto command.
 
-Thanks to Ned Freed and Ken Murchison for feedback on the EXTRA
-mailing list.
+Thanks to Ned Freed and Ken Murchison and Alexey Melnikov for feedback
+on the EXTRA mailing list.
 
 # Changes
 
 (EDITOR: remove this section before publication)
+
+## draft-ietf-sieve-mailboxid-00
+
+* Adopted into working group per adoption call on list
+* Updated references to old drafts which have since been published.
+* Fixed some typoes and simplified some language.
+* Removed stray leading colon on mailboxexists (thanks Alexey)
+* Added :fcc to the IANA registration description (thanks Alexey)
+* Mentioned that variables can be expanded (thanks Alexey)
 
 ## draft-gondwana-sieve-mailboxid-02
 
@@ -290,10 +307,5 @@ mailing list.
 ## draft-gondwana-sieve-mailboxid-00
 
 * Initial version.
-
-# TODO
-
-Is there a more explicit way to update the grammar?  It seems less
-fully specified than IMAP.
 
 {backmatter}
