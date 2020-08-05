@@ -2,18 +2,18 @@
     title = "Sieve Email Filtering: delivery by mailboxid"
     abbrev = "Sieve MAILBOXID"
     category = "std"
-    docName = "draft-ietf-extra-sieve-mailboxid-01"
+    docName = "draft-ietf-extra-sieve-mailboxid-02"
     updates = [5228]
     ipr= "trust200902"
     area = "Applications"
     workgroup = "EXTRA"
     keyword = ["sieve", "email"]
 
-    date = 2020-07-30T00:00:00Z
+    date = 2020-08-06T00:00:00Z
 
     [seriesInfo]
     name="Internet-Draft"
-    value="draft-ietf-extra-sieve-mailboxid-01"
+    value="draft-ietf-extra-sieve-mailboxid-02"
     stream="IETF"
     status="standard"
 
@@ -186,7 +186,7 @@ notify :fcc "INBOX.Sent"
        "mailto:ken@example.com";
 ```
 
-# Test ":mailboxidexists"
+# Test "mailboxidexists"
 
 The "mailboxidexists" test is true if all mailboxes listed in the
 "mailboxids" argument exist in the mailstore, and each allows the
@@ -282,6 +282,10 @@ on the EXTRA mailing list.
 # Changes
 
 (EDITOR: remove this section before publication)
+
+## draft-ietf-sieve-mailboxid-02
+
+* removed bogus : from "mailboxidexists" test title
 
 ## draft-ietf-sieve-mailboxid-01
 
