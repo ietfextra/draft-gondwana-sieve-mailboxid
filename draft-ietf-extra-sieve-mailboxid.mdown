@@ -9,7 +9,7 @@
     workgroup = "EXTRA"
     keyword = ["sieve", "email"]
 
-    date = 2020-08-06T00:00:00Z
+    date = 2020-09-03T00:00:00Z
 
     [seriesInfo]
     name="Internet-Draft"
@@ -161,7 +161,7 @@ fileinto :mailboxid "F1234567"
             # with a different mailboxid.
 ```
 
-## Interaction with "fcc" extension
+# Interaction with "fcc" extension
 
 This document extends the definition of the ":fcc" argument defined in
 [@!RFC8580] so that it can optionally be used with the ":mailboxid"
@@ -286,6 +286,8 @@ on the EXTRA mailing list.
 ## draft-ietf-sieve-mailboxid-02
 
 * removed bogus : from "mailboxidexists" test title
+* moved FCC to its own top-level section since it is not used
+  with the fileinto command.
 
 ## draft-ietf-sieve-mailboxid-01
 
