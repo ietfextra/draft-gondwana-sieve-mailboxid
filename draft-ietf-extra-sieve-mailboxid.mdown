@@ -2,18 +2,18 @@
     title = "Sieve Email Filtering: delivery by mailboxid"
     abbrev = "Sieve MAILBOXID"
     category = "std"
-    docName = "draft-ietf-extra-sieve-mailboxid-02"
+    docName = "draft-ietf-extra-sieve-mailboxid-04"
     updates = [5228]
     ipr= "trust200902"
     area = "Applications"
     workgroup = "EXTRA"
     keyword = ["sieve", "email"]
 
-    date = 2020-09-03T00:00:00Z
+    date = 2020-11-02T00:00:00Z
 
     [seriesInfo]
     name="Internet-Draft"
-    value="draft-ietf-extra-sieve-mailboxid-02"
+    value="draft-ietf-extra-sieve-mailboxid-04"
     stream="IETF"
     status="standard"
 
@@ -55,9 +55,9 @@ however this is a multi-step process and subject to partial failures.
 Also, if the folder is renamed by a different mechanism (e.g. another
 IMAP client) the rules will get out of sync.
 
-By extending `fileinto` to reference the immutable mailboxid specified by
-[@!RFC8474] , sieve rules can continue to target the same mailbox, even
-if it gets renamed.
+By telling "fileinto" to reference the immutable mailboxid specified
+by [@!RFC8474], using the extension specified herein, sieve rules can
+continue to target the same mailbox even if it gets renamed.
 
 # Conventions Used In This Document
 
@@ -69,8 +69,8 @@ they appear in all capitals, as shown here.
 
 # Sieve capability string
 
-The server advertises the capability "mailboxid", and scripts which use
-the following extensions MUST explicitly request the capability "mailboxid".
+Scripts which use the following extensions MUST explicitly require
+the capability "mailboxid".
 
 Example:
 
@@ -107,7 +107,7 @@ if header :contains ["from"] "coyote" {
 
 ## Interaction with "mailbox" extension
 
-For servers which also support the [@RFC5490] mailbox extension, the ":create"
+For servers which also support the [!@RFC5490] mailbox extension, the ":create"
 modifier to fileinto does not create the mailbox with the specified mailboxid,
 however it may be specified and interacts as normal with all other extensions.
 
@@ -126,12 +126,12 @@ fileinto :mailboxid "Fnosuch"
 
 ## Interaction with "specialuse" extension
 
-For servers which also support [@RFC8579] delivery to special-use mailboxes,
+For servers which also support [!@RFC8579] delivery to special-use mailboxes,
 if a fileinto command has both ":mailboxid" and ":special-use" specified, then
 the mailboxid is resolved first.
 
 If a mailbox with the specified mailboxid does not exist, then the process
-specified in [@RFC8579] is followed - which includes processing of [@RFC5490]
+specified in [!@RFC8579] is followed - which includes processing of [!@RFC5490]
 ":create" tags to add the special-use to the created mailbox.
 
 Example:
@@ -145,6 +145,11 @@ if header :contains ["from"] "coyote" {
              "INBOX.harassment";
 }
 ```
+
+This means that if a mailbox with ID F6352ae03-b7f5-463c-896f-d8b48ee3 exists,
+the email will be filed there, regardless of what name or special-use it has,
+and regardless of whether a different mailbox exists with either the special-use
+or name specified.
 
 Example:
 ```
@@ -236,14 +241,12 @@ variable expansions if [@RFC5229] is enabled.
 # Formal Syntax
 
 ```
-test /= "mailboxidexists" string-list
+test =/ "mailboxidexists" string-list
 
-tag /= ":mailboxid" string
-```
+tag =/ ":mailboxid" string
 
-If [@RFC8580] is supported:
-```
 FCC =/ [":mailboxid" <mailboxid: string>]
+       ; if [@RFC8580] is supported
 ```
 
 # Security considerations
@@ -282,6 +285,15 @@ on the EXTRA mailing list.
 # Changes
 
 (EDITOR: remove this section before publication)
+
+## draft-ietf-sieve-mailboxid-04
+
+* made RFC5490 and RFC8579 normative
+* clarified wording based on AD feedback from Barry
+
+## draft-ietf-sieve-mailboxid-03
+
+* Fixed ABNF syntax error
 
 ## draft-ietf-sieve-mailboxid-02
 
