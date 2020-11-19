@@ -2,18 +2,18 @@
     title = "Sieve Email Filtering: delivery by mailboxid"
     abbrev = "Sieve MAILBOXID"
     category = "std"
-    docName = "draft-ietf-extra-sieve-mailboxid-04"
+    docName = "draft-ietf-extra-sieve-mailboxid-05"
     updates = [5228]
     ipr= "trust200902"
     area = "Applications"
     workgroup = "EXTRA"
     keyword = ["sieve", "email"]
 
-    date = 2020-11-02T00:00:00Z
+    date = 2020-11-19T00:00:00Z
 
     [seriesInfo]
     name="Internet-Draft"
-    value="draft-ietf-extra-sieve-mailboxid-04"
+    value="draft-ietf-extra-sieve-mailboxid-05"
     stream="IETF"
     status="standard"
 
@@ -127,44 +127,17 @@ fileinto :mailboxid "Fnosuch"
 ## Interaction with "specialuse" extension
 
 For servers which also support [!@RFC8579] delivery to special-use mailboxes,
-if a fileinto command has both ":mailboxid" and ":special-use" specified, then
-the mailboxid is resolved first.
+it is an error to specify both ":mailboxid" and ":special-use" in the same
+fileinto command.
 
-If a mailbox with the specified mailboxid does not exist, then the process
-specified in [!@RFC8579] is followed - which includes processing of [!@RFC5490]
-":create" tags to add the special-use to the created mailbox.
+Advanced filtering based on both special-use and mailboxid can be
+built with explicit "specialuse_exists" and "mailboxidexists" tests.
 
-Example:
-```
-require "fileinto";
-require "mailboxid";
-require "special-use";
-if header :contains ["from"] "coyote" {
-    fileinto :mailboxid "F6352ae03-b7f5-463c-896f-d8b48ee3"
-             :specialuse "\\Junk"
-             "INBOX.harassment";
-}
-```
-
-This means that if a mailbox with ID F6352ae03-b7f5-463c-896f-d8b48ee3 exists,
-the email will be filed there, regardless of what name or special-use it has,
-and regardless of whether a different mailbox exists with either the special-use
-or name specified.
-
-Example:
-```
-require "fileinto";
-require "mailboxid";
-require "mailbox";
-require "special-use";
-
-fileinto :mailboxid "F1234567"
-         :specialuse "\\Archive"
-         :create
-         "INBOX.Archive";
-            # creates INBOX.Archive with use \Archive but
-            # with a different mailboxid.
-```
+Note to developers of sieve generation tools: it is advisable to use
+special-use rather than mailboxid when creating rules that are based
+on a special-use purpose (e.g. delivery directly to the Junk folder
+based on a header that was added by a scanning agent earlier in the
+mailflow).
 
 # Interaction with "fcc" extension
 
@@ -285,6 +258,10 @@ on the EXTRA mailing list.
 # Changes
 
 (EDITOR: remove this section before publication)
+
+## draft-ietf-sieve-mailboxid-05
+
+* disallow :mailboxid and :special-use in the same fileinto action.
 
 ## draft-ietf-sieve-mailboxid-04
 
