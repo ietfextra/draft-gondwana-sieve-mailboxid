@@ -2,18 +2,18 @@
     title = "Sieve Email Filtering: delivery by mailboxid"
     abbrev = "Sieve MAILBOXID"
     category = "std"
-    docName = "draft-ietf-extra-sieve-mailboxid-05"
+    docName = "draft-ietf-extra-sieve-mailboxid-06"
     updates = [5228]
     ipr= "trust200902"
     area = "Applications"
     workgroup = "EXTRA"
     keyword = ["sieve", "email"]
 
-    date = 2020-11-19T00:00:00Z
+    date = 2020-12-01T00:00:00Z
 
     [seriesInfo]
     name="Internet-Draft"
-    value="draft-ietf-extra-sieve-mailboxid-05"
+    value="draft-ietf-extra-sieve-mailboxid-06"
     stream="IETF"
     status="standard"
 
@@ -194,7 +194,7 @@ require "mailboxid";
 if header :contains ["from"] "coyote" {
     if mailboxidexists "F6352ae03-b7f5-463c-896f-d8b48ee3" {
         fileinto :mailboxid "F6352ae03-b7f5-463c-896f-d8b48ee3"
-                            "INBOX.harassment";
+                            "INBOX.name.will.not.be.used";
     } else {
         fileinto "INBOX.harassment";
     }
@@ -258,6 +258,10 @@ on the EXTRA mailing list.
 # Changes
 
 (EDITOR: remove this section before publication)
+
+## draft-ietf-sieve-mailboxid-06
+
+* GENART review - fixed example to not be semantically pointless
 
 ## draft-ietf-sieve-mailboxid-05
 
