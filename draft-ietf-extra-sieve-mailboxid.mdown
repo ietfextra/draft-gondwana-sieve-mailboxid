@@ -9,7 +9,7 @@
     workgroup = "EXTRA"
     keyword = ["sieve", "email"]
 
-    date = 2020-12-01T00:00:00Z
+    date = 2020-12-03T00:00:00Z
 
     [seriesInfo]
     name="Internet-Draft"
@@ -107,7 +107,7 @@ if header :contains ["from"] "coyote" {
 
 ## Interaction with "mailbox" extension
 
-For servers which also support the [!@RFC5490] mailbox extension, the ":create"
+For servers which also support the [@!RFC5490] mailbox extension, the ":create"
 modifier to fileinto does not create the mailbox with the specified mailboxid,
 however it may be specified and interacts as normal with all other extensions.
 
@@ -126,7 +126,7 @@ fileinto :mailboxid "Fnosuch"
 
 ## Interaction with "specialuse" extension
 
-For servers which also support [!@RFC8579] delivery to special-use mailboxes,
+For servers which also support [@!RFC8579] delivery to special-use mailboxes,
 it is an error to specify both ":mailboxid" and ":special-use" in the same
 fileinto command.
 
@@ -262,6 +262,7 @@ on the EXTRA mailing list.
 ## draft-ietf-sieve-mailboxid-06
 
 * GENART review - fixed example to not be semantically pointless
+* GENART review - fixed !@ to @! in RFC reference mmark syntax
 
 ## draft-ietf-sieve-mailboxid-05
 
